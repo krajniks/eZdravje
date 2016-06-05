@@ -6,6 +6,12 @@
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {padding-top: 70px;}
+    .funkcija {
+      border-style: solid;
+      border-color: LightGrey;
+      padding: 5px;
+      border-width: 1px;
+    }
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
@@ -41,20 +47,55 @@
     <div class="row">
       <div class="col-lg-12 text-center">
         <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
-        <div id="zaloge_krvi"></div>
-        <script>
-          var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
-          var zaloge_krvi_url = http + '//cors-anywhere.herokuapp.com/http://www.ztm.si/krvodajalstvo/zaloge/';
-          $.get(zaloge_krvi_url,function(data){
-            var blood_data = data.match(/AppBloodMeter.data = {.*}/)[0].replace(/.*{/,'{');
-            console.log(blood_data);
-            var blood_dict = eval('('+blood_data+')');
-            for(var key in blood_dict){
-              console.log(blood_dict[key]);
-            }
+          <div id="zaloge_krvi">
+          <script>
+            var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+            var zaloge_krvi_url = http + '//cors-anywhere.herokuapp.com/http://www.ztm.si/krvodajalstvo/zaloge/';
+            $.get(zaloge_krvi_url,function(data){
+              var blood_data = data.match(/AppBloodMeter.data = {.*}/)[0].replace(/.*{/,'{');
+              var blood_dict = eval('('+blood_data+')');
+              for(var key in blood_dict){
+                console.log(blood_dict[key]);
+              }
+  
+            });
+          </script>
+        </div>
+        <div id="vnesi_krvodajalca" class='funkcija' style="text-align: left;">
+  				<div class="heading">
+  					<div class="col-lg-8 col-md-8 col-sm-8"><b>Kreiraj EHR zapis</b> za novega bolnika</div></br>
+  				</div>
+					<div class="body">
+						<span class="label label-default">Ime</span><input id="kreirajIme" type="text" class="form-control input-mini" placeholder="Janez">
+						<span class="label label-default">Priimek</span><input id="kreirajPriimek" type="text" class="form-control" placeholder="Primernik">
+						<span class="label label-default">Datum rojstva</span><input id="kreirajDatumRojstva" type="datetime-local" class="form-control">
+						<span class="label label-default">Spol</span>
+					  <form id="kreirajSpol" class="form-control">
+					    <input type="radio" value="Moški" name="spol">Moški
+					    <input type="radio" value="Ženski" name="spol">Ženski
+					    <input type="radio"value="Drugo" name="spol">Drugo
+					  </form>
+						<span class="label label-default">Naslov</span><input id="kreirajNaslov" type="text" class="form-control" placeholder="Ulica Angelce Hlebce 13, Kranj">
+						<span class="label label-default">Obveščaj o akcijah</span>
+						<form id="kreirajObvescajOAkcijah" class="form-control">
+						  <input type="checkbox">
+					  </form>
+					  <span class="label label-default">Krvna skupina</span>
+					  <form id="kreirajKrvnaSkupina" class="form-control">
+					    <input type="radio" value="A" name="krvna_skuipina">A
+					    <input type="radio" value="B" name="krvna_skuipina">B
+					    <input type="radio"value="AB" name="krvna_skuipina">AB
+					    <input type="radio"value="0" name="krvna_skuipina">0
+					  </form>
+					  <span class="label label-default">Rh faktor</span>
+					  <form id="kreirajRhFaktor" class="form-control">
+					    <input type="radio" value="Rh+" name="krvna_skuipina">Rh+
+					    <input type="radio" value="Rh-" name="krvna_skuipina">Rh-
+					  </form>
 
-          });
-        </script>
+						<button type="button" class="btn btn-primary btn-xs" style="margin-top: 3px" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span>
+				  </div>
+				</div>
       </div>
     </div>
   </div>
