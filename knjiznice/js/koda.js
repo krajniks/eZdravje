@@ -323,6 +323,7 @@ function preberiMeritveVitalnihZnakov() {
 					"bp/data[at0001]/events[at0006 and name/value='Any event']/data[at0003]/items[at0005]/value/magnitude as diastolic, "+
 					"bw/data[at0002]/events[at0003 and name/value='Any event']/data[at0001]/items[at0004]/value/magnitude as weight " +
 					"from EHR[ehr_id/value='" + ehrId +"'] CONTAINS " +
+					"COMPOSITION [openEHR-EHR-COMPOSITION.encounter.v1] CONTAINS " +
 					"(OBSERVATION bp [openEHR-EHR-OBSERVATION.blood_pressure.v1] AND " +
 					"OBSERVATION bw [openEHR-EHR-OBSERVATION.body_weight.v1] )";
 					
