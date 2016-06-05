@@ -5,13 +5,20 @@
   <title>eZdravje :: 4. DN :: OIS 2015/2016</title>
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {padding-top: 70px;}
+    body {padding-top: 70px;
+        background-color: LightGrey;
+    }
     .funkcija {
       border-style: solid;
-      border-color: LightGrey;
+      border-color: Grey;
       padding: 5px;
-      border-width: 1px;
+      border-width: 2px;
+      margin-top: 20px;
     }
+    .btn-primary {
+      margin-top: 3px;
+    }
+    
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
@@ -93,9 +100,74 @@
 					    <input type="radio" value="Rh-" name="rh_faktor">Rh-
 					  </form>
 
-						<button type="button" class="btn btn-primary btn-xs" style="margin-top: 3px" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><br><span id="kreirajSporocilo"></span>
+						<button type="button" class="btn btn-primary btn-xs" style="margin-top: 3px" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span>
 				  </div>
 				</div>
+			<div id="popravi_krvodajalca" class='funkcija' style="text-align: left;">
+  				<div class="heading">
+  					<div class="col-lg-8 col-md-8 col-sm-8"><b>Preberi in posodobi EHR zapis</b> za obstoječega bolnika</div></br>
+  				</div>
+    			<div class="body">
+    			  <span class="label label-default">EHR ID</span><input id="preberiEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+    			  <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHRodBolnika()">Preberi osnovne podatke o bolniku</button><span id="preberiSporocilo"></span><br>
+    			  <span class="label label-default">EHR ID</span><input id="izbranEHRid" type="text" class="form-control input-mini" readonly>
+    				<span class="label label-default">Ime</span><input id="popraviIme" type="text" class="form-control input-mini" placeholder="Janez">
+    				<span class="label label-default">Priimek</span><input id="popraviPriimek" type="text" class="form-control" placeholder="Primernik">
+    				<span class="label label-default">Datum rojstva</span><input id="popraviDatumRojstva" type="datetime-local" class="form-control">
+    				<span class="label label-default">Spol</span>
+    			  <form id="popraviSpol" class="form-control">
+    			    <input type="radio" value="MALE" name="spol">Moški
+    			    <input type="radio" value="FEMALE" name="spol">Ženski
+    			    <input type="radio"value="OTHER" name="spol">Drugo
+    			  </form>
+    				<span class="label label-default">Naslov</span><input id="popraviNaslov" type="text" class="form-control" placeholder="Ulica Angelce Hlebce 13, Kranj">
+    				<span class="label label-default">Obveščaj o akcijah</span>
+    				<form class="form-control">
+    				  <input id="popraviObvescajOAkcijah" type="checkbox">
+    			  </form>
+    			  <span class="label label-default">Krvna skupina</span>
+    			  <form id="popraviKrvnaSkupina" class="form-control">
+    			    <input type="radio" value="A" name="krvna_skupina">A
+    			    <input type="radio" value="B" name="krvna_skupina">B
+    			    <input type="radio"value="AB" name="krvna_skupina">AB
+    			    <input type="radio"value="0" name="krvna_skupina">0
+    			  </form>
+    			  <span class="label label-default">Rh faktor</span>
+    			  <form id="popraviRhFaktor" class="form-control">
+    			    <input type="radio" value="Rh+" name="rh_faktor">Rh+
+    			    <input type="radio" value="Rh-" name="rh_faktor">Rh-
+    			  </form>
+    
+    				<button type="button" class="btn btn-primary btn-xs"  onclick="popraviEHRzaBolnika()">Popravi osnovne podatke o bolniku</button><span id="popraviSporocilo"></span>
+    		  </div>
+    		</div>
+			<div id="odvzem" class='funkcija' style="text-align: left;">
+		        <div class="heading">
+					<div class="col-lg-8 col-md-8 col-sm-8"><b>Vnos odvzema</b> za krvodajalca</div><br>
+				</div>
+				<div class="body">
+					<span class="label label-default">EHR ID</span><input id="vnosOdvzemaEHR" type="text" class="form-control input-mini" placeholder="955563b1-574a-46bc-8674-840a8e234d8d">
+					<span class="label label-default">Datum in ura</span><input id="vnosOdvzemaDatumInUra" type="datetime-local" class="form-control input-mini" >
+					<span class="label label-default">Telesna teža</span><div class="input-group"><input id="vnosOdvzemaTelesnaTeza" type="text" class="form-control input-mini" placeholder="75"><span class="input-group-addon">kg</span></div>
+					<span class="label label-default">Sistolični krvni tlak</span><div class="input-group"><input id="vnosOdvzemaKrvniTlakSistolicni" type="text" class="form-control input-mini" placeholder="120"><span class="input-group-addon">mm Hg</span></div>
+					<span class="label label-default">Diastolični krvni tlak</span><div class="input-group"><input id="vnosOdvzemaKrvniTlakDiastolicni" type="text" class="form-control input-mini" placeholder="90"><span class="input-group-addon">mm Hg</span></div>
+					<span class="label label-default">Nasičenost krvi s kisikom</span><div class="input-group"><input id="vnosOdvzemaNasicenostKrviSKisikom" type="text" class="form-control input-mini" placeholder="100"><span class="input-group-addon">%</span></div>
+					<span class="label label-default">Srčni utrip</span><div class="input-group"><input id="vnosOdvzemaSrcniUtrip" type="text" class="form-control input-mini" placeholder="80"><span class="input-group-addon">utripov/minuto</span></div>
+					<button type="button" class="btn btn-primary btn-xs" onclick="vnosOdvzema()">Dodaj odvzem</button><span id="vnosOdvzemaSporocilo"></span>
+			  	</div>
+			</div>
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6"><b>Pregled</b> meritev <b>vitalnih znakov</b> bolnika</div>
+					<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiTipZaVitalneZnake"><option value="telesna temperatura">telesna temperatura</option><option value="telesna temperatura AQL">telesna temperatura (filter na podhladitev)</option><option value="telesna teža">telesna teža</option></select></div>
+					<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option></select></div>
+				</div>
+			</div>
+			<div class="panel-body">
+				<span class="label label-default">EHR ID</span><input id="zgodovinaOdvzemovEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+				<button type="button" class="btn btn-primary btn-xs" onclick="preberiMeritveVitalnihZnakov()">Preberi meritve vitalnih znakov</button><span id="zgodovinaOdvzemovSporocilo"></span>
+				<div id="rezultatMeritveVitalnihZnakov"></div>
+		  	</div>
       </div>
     </div>
   </div>
