@@ -42,3 +42,70 @@ function generirajPodatke(stPacienta) {
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 
 
+function kreirajEHRzaBolnika() {
+	sessionId = getSessionId();
+
+	var ime = $("#kreirajIme").val();
+	var priimek = $("#kreirajPriimek").val();
+	var datumRojstva = $("#kreirajDatumRojstva").val();
+	var spol = $("input[name=spol]:checked","#kreirajSpol").val();
+	var naslov = $("#kreirajNaslov").val();
+	var obvescanje = $("#kreirajObvescajOAkcijah").is(":checked");
+	var krvnaSkupina = $("input[name=krvna_skupina]:checked","#kreirajKrvnaSkupina").val();
+	var RHFaktor = $("input[name=rh_faktor]:checked","#kreirajRhFaktor").val();
+
+
+	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
+      priimek.trim().length == 0 || datumRojstva.trim().length == 0 ||
+      !datumRojstva || !spol || !naslov || naslov.trim().length == 0 ) {
+		$("#kreirajSporocilo").html("<span class='obvestilo label " +
+      "label-warning fade-in'>Prosim vnesite zahtevane podatke!</span>");
+	} else {
+
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		$.ajax({
+		    url: baseUrl + "/ehr",
+		    type: 'POST',
+		    success: function (data) {
+		        var ehrId = data.ehrId;
+		        var partyData = {
+		            firstNames: ime,
+		            lastNames: priimek,
+		            dateOfBirth: datumRojstva,
+		            gender: spol,
+		            address: {      
+                      address: naslov
+                    },
+		            partyAdditionalInfo: [
+		                {key: "ehrId", value: ehrId},
+		                {key: "obvescanje", value: obvescanje},
+		                {key: "krvnaSkupina", value: krvnaSkupina},
+		                {key: "RHFaktor", value: RHFaktor}
+		                ]
+		        };
+		        $.ajax({
+		            url: baseUrl + "/demographics/party",
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(partyData),
+		            success: function (party) {
+		                if (party.action == 'CREATE') {
+		                    $("#kreirajSporocilo").html("<span class='obvestilo " +
+                          "label label-success fade-in'>Uspešno kreiran EHR '" +
+                          ehrId + "'.</span>");
+		                    $("#preberiEHRid").val(ehrId);
+		                }
+		            },
+		            error: function(err) {
+		            	$("#kreirajSporocilo").html("<span class='obvestilo label " +
+                    "label-danger fade-in'>Napaka '" +
+                    JSON.parse(err.responseText).userMessage + "'!");
+		            }
+		        });
+		    }
+		});
+	}
+}
+

@@ -71,29 +71,29 @@
 						<span class="label label-default">Datum rojstva</span><input id="kreirajDatumRojstva" type="datetime-local" class="form-control">
 						<span class="label label-default">Spol</span>
 					  <form id="kreirajSpol" class="form-control">
-					    <input type="radio" value="Moški" name="spol">Moški
-					    <input type="radio" value="Ženski" name="spol">Ženski
-					    <input type="radio"value="Drugo" name="spol">Drugo
+					    <input type="radio" value="MALE" name="spol">Moški
+					    <input type="radio" value="FEMALE" name="spol">Ženski
+					    <input type="radio"value="OTHER" name="spol">Drugo
 					  </form>
 						<span class="label label-default">Naslov</span><input id="kreirajNaslov" type="text" class="form-control" placeholder="Ulica Angelce Hlebce 13, Kranj">
 						<span class="label label-default">Obveščaj o akcijah</span>
-						<form id="kreirajObvescajOAkcijah" class="form-control">
-						  <input type="checkbox">
+						<form class="form-control">
+						  <input id="kreirajObvescajOAkcijah" type="checkbox">
 					  </form>
 					  <span class="label label-default">Krvna skupina</span>
 					  <form id="kreirajKrvnaSkupina" class="form-control">
-					    <input type="radio" value="A" name="krvna_skuipina">A
-					    <input type="radio" value="B" name="krvna_skuipina">B
-					    <input type="radio"value="AB" name="krvna_skuipina">AB
-					    <input type="radio"value="0" name="krvna_skuipina">0
+					    <input type="radio" value="A" name="krvna_skupina">A
+					    <input type="radio" value="B" name="krvna_skupina">B
+					    <input type="radio"value="AB" name="krvna_skupina">AB
+					    <input type="radio"value="0" name="krvna_skupina">0
 					  </form>
 					  <span class="label label-default">Rh faktor</span>
 					  <form id="kreirajRhFaktor" class="form-control">
-					    <input type="radio" value="Rh+" name="krvna_skuipina">Rh+
-					    <input type="radio" value="Rh-" name="krvna_skuipina">Rh-
+					    <input type="radio" value="Rh+" name="rh_faktor">Rh+
+					    <input type="radio" value="Rh-" name="rh_faktor">Rh-
 					  </form>
 
-						<button type="button" class="btn btn-primary btn-xs" style="margin-top: 3px" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><span id="kreirajSporocilo"></span>
+						<button type="button" class="btn btn-primary btn-xs" style="margin-top: 3px" onclick="kreirajEHRzaBolnika()">Dodaj osnovne podatke o bolniku</button><br><span id="kreirajSporocilo"></span>
 				  </div>
 				</div>
       </div>
