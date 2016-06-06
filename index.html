@@ -18,6 +18,9 @@
     .btn-primary {
       margin-top: 3px;
     }
+    th, td{
+        padding: 3px;
+    }
     
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
@@ -53,21 +56,58 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12 text-center">
-        <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
-          <div id="zaloge_krvi">
-          <script>
-            var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
-            var zaloge_krvi_url = http + '//cors-anywhere.herokuapp.com/http://www.ztm.si/krvodajalstvo/zaloge/';
-            $.get(zaloge_krvi_url,function(data){
-              var blood_data = data.match(/AppBloodMeter.data = {.*}/)[0].replace(/.*{/,'{');
-              var blood_dict = eval('('+blood_data+')');
-              for(var key in blood_dict){
-                console.log(blood_dict[key]);
-              }
-  
-            });
-          </script>
+        <div id="zaloge_krvi" class='funkcija'>
+            <canvas id="myChart" width="500" height="200"></canvas>
+            
         </div>
+
+            <script src="node_modules/chart.js/dist/Chart.js"></script>
+            <script>
+                var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+                var zaloge_krvi_url = http + '//cors-anywhere.herokuapp.com/http://www.ztm.si/krvodajalstvo/zaloge/';
+                var chart_labels = [];
+                var chart_data =[];
+                $.get(zaloge_krvi_url,function(data){
+                  var blood_data = data.match(/AppBloodMeter.data = {.*}/)[0].replace(/.*{/,'{');
+                  var blood_dict = eval('('+blood_data+')');
+                  for(var key in blood_dict){
+                    chart_labels.push(key.replace("_plus","+").replace("_minus","-").toUpperCase());
+                    chart_data.push(blood_dict[key]);
+                  }
+                var ctx = $("#myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                    labels: chart_labels,
+                        datasets: [{
+                            label: 'Zaloge krvi',
+                            data: chart_data,                            
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255,99,132,1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                },
+                                scaleLabel: {
+                                   display: true,
+                                   labelString: 'Zaloge v %'
+                                }
+                            }]
+                        }
+                    },
+                    
+                });
+                });
+                
+                
+                </script>
+            
         <div id="vnesi_krvodajalca" class='funkcija' style="text-align: left;">
   				<div class="heading">
   					<div class="col-lg-8 col-md-8 col-sm-8"><b>Kreiraj EHR zapis</b> za novega bolnika</div></br>
@@ -156,18 +196,18 @@
 					<button type="button" class="btn btn-primary btn-xs" onclick="vnosOdvzema()">Dodaj odvzem</button><span id="vnosOdvzemaSporocilo"></span>
 			  	</div>
 			</div>
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-6"><b>Pregled</b> meritev <b>vitalnih znakov</b> bolnika</div>
-					<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiTipZaVitalneZnake"><option value="telesna temperatura">telesna temperatura</option><option value="telesna temperatura AQL">telesna temperatura (filter na podhladitev)</option><option value="telesna teža">telesna teža</option></select></div>
-					<div class="col-lg-3 col-md-3 col-sm-3"><select class="form-control input-sm" id="preberiEhrIdZaVitalneZnake"><option value=""></option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option></select></div>
-				</div>
-			</div>
-			<div class="panel-body">
-				<span class="label label-default">EHR ID</span><input id="zgodovinaOdvzemovEHRid" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-				<button type="button" class="btn btn-primary btn-xs" onclick="preberiMeritveVitalnihZnakov()">Preberi meritve vitalnih znakov</button><span id="zgodovinaOdvzemovSporocilo"></span>
-				<div id="rezultatMeritveVitalnihZnakov"></div>
-		  	</div>
+			<div id="zgodovinaOdvzemov" class='funkcija' style='text-align: left'>
+    			<div class="heading">
+    				<div class="row">
+    					<div class="col-lg-6 col-md-6 col-sm-6"><b>Zgodovina odvzemov</b> krvodajalca</div>
+    				</div>
+    			</div>
+    			<div class="body">
+    				<span class="label label-default">EHR ID</span><input id="zgodovinaOdvzemovEHRid" type="text" class="form-control input-mini" placeholder="955563b1-574a-46bc-8674-840a8e234d8d">
+    				<button type="button" class="btn btn-primary btn-xs" onclick="zgodovinaOdvzemov()">Poglej zgodovino odvzemov</button><span id="zgodovinaOdvzemovSporocilo"></span>
+    				<div id="rezultatZgodovinaOdvzemov"></div>
+    		  	</div>
+    		</div>
       </div>
     </div>
   </div>

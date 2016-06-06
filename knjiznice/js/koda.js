@@ -190,7 +190,6 @@ function popraviEHRzaBolnika() {
 		    url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
 		    type: 'GET',
 		    success: function (data) {
-				console.log(data);
 		        var partyData = {
 		        	id: data.party.id,
 		        	version: data.party.version,
@@ -254,7 +253,9 @@ function vnosOdvzema(){
 		    headers: {"Ehr-Session": sessionId}
 		});
 		var podatkiOdvzema = {
-		    "vital_signs/context/time/start_time": datumInUra,
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": datumInUra,
 		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
 		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
 		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
@@ -286,11 +287,11 @@ function vnosOdvzema(){
 	
 }
 
-function preberiMeritveVitalnihZnakov() {
+function zgodovinaOdvzemov() {
 	sessionId = getSessionId();
 
 	var ehrId = $("#zgodovinaOdvzemovEHRid").val();
-
+	$("#rezultatZgodovinaOdvzemov").html('');
 	if (!ehrId || ehrId.trim().length == 0) {
 		$("#zgodovinaOdvzemovSporocilo").html("<span class='obvestilo " +
       "label label-warning fade-in'>Prosim vnesite zahtevan podatek!");
@@ -319,44 +320,49 @@ function preberiMeritveVitalnihZnakov() {
 
 				var AQL =
 					"select " +
-					"bp/data[at0001]/events[at0006 and name/value='Any event']/data[at0003]/items[at0004]/value/magnitude as systolic, "+ 
-					"bp/data[at0001]/events[at0006 and name/value='Any event']/data[at0003]/items[at0005]/value/magnitude as diastolic, "+
-					"bw/data[at0002]/events[at0003 and name/value='Any event']/data[at0001]/items[at0004]/value/magnitude as weight " +
+					"bp/data[at0001]/events[at0006 and name/value='Any event']/data[at0003]/items[at0004]/value/magnitude as sistolicniKrvniTlak, "+ 
+					"bp/data[at0001]/events[at0006 and name/value='Any event']/data[at0003]/items[at0005]/value/magnitude as diastolicniKrvniTlak, "+
+					"bw/data[at0002]/events[at0003 and name/value='Any event']/data[at0001]/items[at0004]/value/magnitude as telesnaTeza, " +
+					"hr/data[at0002]/events[at0003 and name/value='Any event']/data[at0001]/items[at0004]/value/magnitude as srcniUtrip, " +
+					"k/data[at0001]/events[at0002]/data[at0003]/items[at0006]/value/numerator as nasicenostKrviSKisikom, " +
+					"c/context/start_time/value as datumInUra " +
 					"from EHR[ehr_id/value='" + ehrId +"'] CONTAINS " +
-					"COMPOSITION [openEHR-EHR-COMPOSITION.encounter.v1] CONTAINS " +
+					"COMPOSITION c [openEHR-EHR-COMPOSITION.encounter.v1] CONTAINS " +
 					"(OBSERVATION bp [openEHR-EHR-OBSERVATION.blood_pressure.v1] AND " +
-					"OBSERVATION bw [openEHR-EHR-OBSERVATION.body_weight.v1] )";
+					"OBSERVATION bw [openEHR-EHR-OBSERVATION.body_weight.v1] AND " +
+					"OBSERVATION hr [openEHR-EHR-OBSERVATION.heart_rate-pulse.v1] AND "+
+					"OBSERVATION k [openEHR-EHR-OBSERVATION.indirect_oximetry.v1]) " +
+					"ORDER BY datumInUra";
 					
-					    
 						
 				$.ajax({
 				    url: baseUrl + "/query?" + $.param({"aql": AQL}),
 				    type: 'GET',
 				    headers: {"Ehr-Session": sessionId},
 				    success: function (res) {
-				    	console.log(res);
-				    	/*var results = "<table class='table table-striped table-hover'>" +
-		                  "<tr><th>Datum in ura</th><th class='text-right'>" +
-		                  "Telesna temperatura</th></tr>";
+				    	var results = "<table>" +
+		                  "<tr><th>Datum in ura</th><th>Telesna teža</th><th>Sistolični tlak</th><th>Diastolični trak</th><th>Srčni utrip</th><th>sp02</th></tr>";
 				    	if (res) {
 				    		var rows = res.resultSet;
 					        for (var i in rows) {
-					            results += "<tr><td>" + rows[i].cas +
-		                          "</td><td class='text-right'>" +
-		                          rows[i].temperatura_vrednost + " " 	+
-		                          rows[i].temperatura_enota + "</td>";
+					            results += "<tr><td>" + rows[i].datumInUra + "</td>" +
+									"<td style='text-align: right;'>" + rows[i].telesnaTeza + "</td>" +
+									"<td style='text-align: right;'>" + rows[i].sistolicniKrvniTlak + "</td>" +
+									"<td style='text-align: right;'>" + rows[i].diastolicniKrvniTlak + "</td>" +
+									"<td style='text-align: right;'>" + rows[i].srcniUtrip + "</td>" +
+		                        	"<td style='text-align: right;'>" + rows[i].nasicenostKrviSKisikom + "</td></tr>";
 					        }
 					        results += "</table>";
-					        $("#rezultatMeritveVitalnihZnakov").append(results);
+					        $("#rezultatZgodovinaOdvzemov").append(results);
 				    	} else {
-				    		$("#preberiMeritveVitalnihZnakovSporocilo").html(
+				    		$("#zgodovinaOdvzemovSporocilo").html(
 			                    "<span class='obvestilo label label-warning fade-in'>" +
 			                    "Ni podatkov!</span>");
-				    	}*/
+				    	}
 
 				    },
 				    error: function(err) {
-				    	$("#preberiMeritveVitalnihZnakovSporocilo").html(
+				    	$("#zgodovinaOdvzemovSporocilo").html(
               "<span class='obvestilo label label-danger fade-in'>Napaka '" +
               JSON.parse(err.responseText).userMessage + "'!");
 				    }
