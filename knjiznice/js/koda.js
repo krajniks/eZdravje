@@ -30,16 +30,229 @@ function getSessionId() {
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
-function generirajPodatke(stPacienta) {
+function generirajPodatke(stPacienta, callback) {
   ehrId = "";
+  var pacient_data;
+  var odvzemi_data
+  switch (stPacienta){
+  	case 1:
+  		pacient_data = {
+  			firstNames: "Janez",
+            lastNames: "Primernik",
+            dateOfBirth: "2000-03-12T14:20",
+            gender: "MALE",
+            address: {      
+              address: "Policijska ulica 20, Maribor"
+            },
+            partyAdditionalInfo: [
+                //{key: "ehrId", value: ehrId},
+                {key: "obvescanje", value: false},
+                {key: "krvnaSkupina", value: "AB"},
+                {key: "RHFaktor", value: "Rh+"}
+                ]	
+  		}
+  		odvzemi_data = [{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-01-01T10:30",
+		    "vital_signs/body_weight/any_event/body_weight": 71,
+		    "vital_signs/blood_pressure/any_event/systolic": 90,
+		    "vital_signs/blood_pressure/any_event/diastolic": 120,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 100,
+		    "vital_signs/pulse/any_event/rate": 85
+		},
+		{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-02-02T07:30",
+		    "vital_signs/body_weight/any_event/body_weight": 72,
+		    "vital_signs/blood_pressure/any_event/systolic": 90,
+		    "vital_signs/blood_pressure/any_event/diastolic": 118,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 99,
+		    "vital_signs/pulse/any_event/rate": 80
+		},
+		{	
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-02-04T11:30",
+		    "vital_signs/body_weight/any_event/body_weight": 73,
+		    "vital_signs/blood_pressure/any_event/systolic": 88,
+		    "vital_signs/blood_pressure/any_event/diastolic": 110,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 98,
+		    "vital_signs/pulse/any_event/rate": 75
+			
+		}];
+  		break;
+  	case 2:
+  		pacient_data = {
+			firstNames: "Marica",
+            lastNames: "Primernik",
+            dateOfBirth: "2000-11-02T17:40",
+            gender: "FEMALE",
+            address: {      
+              address: "Gasilska ulica 7, Ljubljana"
+            },
+            partyAdditionalInfo: [
+                //{key: "ehrId", value: ehrId},
+                {key: "obvescanje", value: true},
+                {key: "krvnaSkupina", value: "A"},
+                {key: "RHFaktor", value: "Rh-"}
+                ]
+  		}
+  		  		odvzemi_data = [{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-10-02T08:30",
+		    "vital_signs/body_weight/any_event/body_weight": 55,
+		    "vital_signs/blood_pressure/any_event/systolic": 70,
+		    "vital_signs/blood_pressure/any_event/diastolic": 95,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 89,
+		    "vital_signs/pulse/any_event/rate": 66
+		},
+		{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-11-10T20:22",
+		    "vital_signs/body_weight/any_event/body_weight": 56,
+		    "vital_signs/blood_pressure/any_event/systolic": 99,
+		    "vital_signs/blood_pressure/any_event/diastolic": 118,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 91,
+		    "vital_signs/pulse/any_event/rate": 83
+		},
+		{	
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-02-03T16:40",
+		    "vital_signs/body_weight/any_event/body_weight": 54,
+		    "vital_signs/blood_pressure/any_event/systolic": 71,
+		    "vital_signs/blood_pressure/any_event/diastolic": 97,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 92,
+		    "vital_signs/pulse/any_event/rate": 69
+			
+		}];
+  		break;
+	case 3:
+  		pacient_data = {
+			firstNames: "Joško",
+            lastNames: "Bunderla",
+            dateOfBirth: "1996-07-08T03:26",
+            gender: "OTHER",
+            address: {      
+              address: "Poštarska cesta 22, Koper"
+            },
+            partyAdditionalInfo: [
+                //{key: "ehrId", value: ehrId},
+                {key: "obvescanje", value: true},
+                {key: "krvnaSkupina", value: "0"},
+                {key: "RHFaktor", value: "Rh-"}
+                ]
+  		}
+  		  		odvzemi_data = [{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-12-09T12:07",
+		    "vital_signs/body_weight/any_event/body_weight": 88,
+		    "vital_signs/blood_pressure/any_event/systolic": 95,
+		    "vital_signs/blood_pressure/any_event/diastolic": 125,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 100,
+		    "vital_signs/pulse/any_event/rate": 100
+		},
+		{
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-11-08T11:34",
+		    "vital_signs/body_weight/any_event/body_weight": 93,
+		    "vital_signs/blood_pressure/any_event/systolic": 93,
+		    "vital_signs/blood_pressure/any_event/diastolic": 130,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 99,
+		    "vital_signs/pulse/any_event/rate": 99
+		},
+		{	
+			"ctx/language": "en",
+		    "ctx/territory": "SI",
+		    "ctx/time": "2005-07-06T11:53",
+		    "vital_signs/body_weight/any_event/body_weight": 100,
+		    "vital_signs/blood_pressure/any_event/systolic": 96,
+		    "vital_signs/blood_pressure/any_event/diastolic": 132,
+		    "vital_signs/indirect_oximetry:0/spo2|numerator": 94,
+		    "vital_signs/pulse/any_event/rate": 96
+			
+		}];
+		break;
+  }
+  callback(stPacienta,pacient_data,odvzemi_data);
+}
+function sendData(stPacienta,pacient_data,odvzemi_data){
+	var sessionId = getSessionId();
+  $.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	$.ajax({
+	    url: baseUrl + "/ehr",
+	    type: 'POST',
+	    success: function (data) {
+		var ehrId = data.ehrId;
+		var partyData = pacient_data;
+		pacient_data.partyAdditionalInfo.push({key: "ehrId", value: ehrId});
+		$.ajax({
+	            url: baseUrl + "/demographics/party",
+	            type: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify(partyData),
+	            success: function (party) {
+	                sendData2(odvzemi_data,ehrId,stPacienta,function(ehrId,stPacienta){
+	                  $('#generirani_podatki').append('<br><b>EhrID '+stPacienta+':</b> '+ ehrId);
+	                });
+	            },
+	            error: function(err) {
+	            	alert('Napaka ' +
+	            JSON.parse(err.responseText).userMessage + "!");
+	            }
+	        });
+	    }
+	});	
+}
 
-  // TODO: Potrebno implementirati
-
-  return ehrId;
+function sendData2(odvzemi_data,ehrId,stPacienta,callback){
+	if(odvzemi_data.length == 0){
+		callback(ehrId,stPacienta);
+		return;
+	}
+	var sessionId = getSessionId();
+	var parametriZahteve = {
+	    ehrId: ehrId,
+	    templateId: 'Vital Signs',
+	    format: 'FLAT',
+	};
+	$.ajaxSetup({
+	    headers: {"Ehr-Session": sessionId}
+	});
+	$.ajax({
+	    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+	    type: 'POST',
+	    contentType: 'application/json',
+	    data: JSON.stringify(odvzemi_data.pop()),
+	    success: function(temp){
+	    	sendData2( odvzemi_data, ehrId, stPacienta, callback);
+	    },
+	    error: function(err) {
+	    	alert('Napaka ' +
+	    JSON.parse(err.responseText).userMessage + "!");
+	    }
+	});		
 }
 
 
-// TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
+ 
+
+
+function generirajZacetnePodatke(){
+	result = '<div class"funkcija"></div>';
+	for(var i = 1;i <=3;i++){
+		generirajPodatke(i,sendData);
+	}
+}
+
 
 
 function kreirajEHRzaBolnika() {
@@ -85,6 +298,7 @@ function kreirajEHRzaBolnika() {
 		                {key: "RHFaktor", value: RHFaktor}
 		                ]
 		        };
+		        console.log(partyData);
 		        $.ajax({
 		            url: baseUrl + "/demographics/party",
 		            type: 'POST',
