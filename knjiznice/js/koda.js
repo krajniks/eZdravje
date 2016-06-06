@@ -528,7 +528,7 @@ function zgodovinaOdvzemov() {
 				            break;
 				    } 
 				});
-				$("#rzgodovinaOdvzemovZnakov").html("<br/><span>Pridobivanje " +
+				$("#zgodovinaOdvzemovZnakov").html("<br/><span>Pridobivanje " +
 		          "podatkov za krvodajalca <b>'" + party.firstNames +
 		          " " + party.lastNames + "'</b>s krvno skupino <b>" +krvnaSkupina+ "</b> in RH faktorjem <b>" + RHFaktor +"</b>.</span><br/><br/>");
 
